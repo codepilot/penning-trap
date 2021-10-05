@@ -1,6 +1,7 @@
 'use strict';
 
 const pong = document.querySelector('.pong');
+const controls = document.querySelector('.controls');
 const allCircles = document.querySelectorAll('.pong circle');
 const fixed = document.querySelectorAll('.fixed circle');
 const mobileGroup = document.querySelector('.mobile');
@@ -20,22 +21,56 @@ const physicsLoopCount = 40;//larger number smoother physics, higher CPU usage, 
 const boardDimensions = {
   minX: 0,
   minY: 0,
-  maxX: pong.clientWidth,
-  maxY: pong.clientHeight,
-  width: pong.clientWidth,
-  height: pong.clientHeight,
-  'center-x': pong.clientWidth / 2,
-  'center-y': pong.clientHeight / 2,
+  maxX: 1920,//pong.clientWidth,
+  maxY: 1080,//pong.clientHeight,
+  width: 1920,//pong.clientWidth,
+  height: 1080,//pong.clientHeight,
+  'center-x': 1920 / 2,// pong.clientWidth / 2,
+  'center-y': 1080 / 2,//pong.clientHeight / 2,
 };
+
+// console.log(boardDimensions);
 
 const eventHistory = [];
 
-function start() {
+function handleTouch(ev) {
+  if(ev.type === 'touchmove' && ev.touches.length === 1) {
+    // console.log(ev);
+    //set_position(players[JSON.parse(decodeURI(window.location.hash.slice(1))).player], property, ev.touches[0].pageY);
+    set_position(players[1], 'y', ev.touches[0].pageY / pong.clientHeight * boardDimensions.maxY);
+  }
+  ev.preventDefault();
+}
+
+function startHandlingTouch() {
+  document.documentElement.addEventListener("touchstart", handleTouch, {passive: false});
+  document.documentElement.addEventListener("touchend", handleTouch, {passive: false});
+  document.documentElement.addEventListener("touchcancel", handleTouch, {passive: false});
+  document.documentElement.addEventListener("touchmove", handleTouch, {passive: false});
+}
+
+function stopHandlingTouch() {
+  document.documentElement.removeEventListener("touchstart", handleTouch, {passive: false});
+  document.documentElement.removeEventListener("touchend", handleTouch, {passive: false});
+  document.documentElement.removeEventListener("touchcancel", handleTouch, {passive: false});
+  document.documentElement.removeEventListener("touchmove", handleTouch, {passive: false});
+}
+
+async function start() {
+  // console.log('start', mobileGroup);
   mobileLocations = new Map(initialMobileLocations.entries());
   mobileLocations.forEach(({x, y}, m)=> {
     mobileGroup.appendChild(m);
+    // console.log('mobileGroup', m);
     set_particle_position(m, {x, y});
   });
+  await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+  await screen.orientation.lock("landscape");
+  pong.classList.remove('hidden');
+  controls.classList.add('hidden');
+  renderLoop(multiPhysics.bind(null, physicsLoopCount));
+  playerFunctions.player2_auto();
+  startHandlingTouch();
 }
 
 document.querySelectorAll('.select-player').forEach((element)=> element.addEventListener('click', ({target: {dataset}})=> {
@@ -43,48 +78,12 @@ document.querySelectorAll('.select-player').forEach((element)=> element.addEvent
 }));
 
 let localOnly = true;
-function connectToEventSource() {
-  localOnly = false;
-  const evtSource = new EventSource('/sse');
-  const startMessage = postJSON.bind(null, {type: 'start'});
-  document.querySelector('.start').addEventListener('click', startMessage);
-
-  evtSource.addEventListener('mousemove', function({data}) {
-    const curTime = performance.now();
-    const {type, hrtime, now, player, x, y} = JSON.parse(data);
-    const biTime = BigInt(hrtime);
-    eventHistory.push({biTime, type, player, x, y});
-    // console.log(type, biTime);
-    const diff = curTime - now;
-    if(player > 0) {
-      set_position(players[player], 'y', y);
-    }
-  });
-
-  evtSource.addEventListener('start', function({data}) {
-    eventHistory.length = 0;
-    const curTime = performance.now();
-    const {type, hrtime, now} = JSON.parse(data);
-    const biTime = BigInt(hrtime);
-    eventHistory.push({biTime, type});
-    // console.log(type, biTime);
-    const diff = curTime - now;
-    start();
-  });
-
-  bindPlayerData();
-
-}
-
-if(window.location.host === "76.191.127.35") {
-  connectToEventSource();
-}
-
 
 function renderLoop(func) {
   function renderOnce() {
-    func();
-    requestAnimationFrame(renderOnce);
+    if(func()) {
+      requestAnimationFrame(renderOnce);
+    }
   }
   requestAnimationFrame(renderOnce);
 }
@@ -157,11 +156,20 @@ function physics() {
     set_particle_position(m, {x, y});
   }
   mobileLocations = newMobileLocations;
+  if(mobileLocations.size === 0) {
+    const exitPromise = document.exitFullscreen();
+    exitPromise.then(()=> {
+      stopHandlingTouch();
+      pong.classList.add('hidden');
+      controls.classList.remove('hidden');
+    });
+    return false;
+  } else {
+    return true;
+  }
 }
 
-const multiPhysics = ((loopCount = 1)=> {for(let i = 0; i < loopCount; i++) { physics(); } })
-
-renderLoop(multiPhysics.bind(null, physicsLoopCount));
+const multiPhysics = ((loopCount = 1)=> { let ret; for(let i = 0; i < loopCount; i++) { ret = physics(); if(!ret) break; }  return ret; })
 
 function set_position(group, property, y) {
   for(let e of group) {
@@ -194,7 +202,7 @@ const selectLargeY = (a, b)=> a.y > b.y?a:b
 const selectSmallY = (a, b)=> a.y < b.y?a:b
 
 function auto_player(group, selectFunc, selectedProp) {
-  if(!mobileLocations.size) { return; }
+  if(!mobileLocations.size) { return ; }
   let playerGroup;
   try {
     playerGroup = players[JSON.parse(decodeURI(window.location.hash.slice(1))).player];
@@ -205,33 +213,7 @@ function auto_player(group, selectFunc, selectedProp) {
     const closest = select_mobile_position(selectFunc);
     set_position(group, selectedProp, closest[selectedProp]);
   }
-}
-
-async function postJSON(data) {
-  const requestHeaders = new Headers({'content-type': 'application/json'});
-  const requestOptions = { /* see https://developer.mozilla.org/en-US/docs/Web/API/Request/Request */
-    method: 'POST',/*The request method, e.g., GET, POST.*/
-    headers: requestHeaders, /*Any headers you want to add to your request, contained within a Headers object or an object literal with ByteString values.*/
-    body: JSON.stringify(Object.assign({now: performance.now()}, data)), /*Any body that you want to add to your request: this can be a Blob, BufferSource, FormData, URLSearchParams, USVString, or ReadableStream object. Note that a request using the GET or HEAD method cannot have a body.*/
-    mode: 'cors', /*The mode you want to use for the request, e.g., cors, no-cors, same-origin, or navigate. The default is cors. In Chrome the default is no-cors before Chrome 47 and same-origin starting with Chrome 47.*/
-    credentials: 'omit', /*The request credentials you want to use for the request: omit, same-origin, or include. The default is omit. In Chrome the default is same-origin before Chrome 47 and include starting with Chrome 47.*/
-    cache: 'no-store', /*The cache mode you want to use for the request.*/
-    redirect: 'error', /*The redirect mode to use: follow, error, or manual. In Chrome the default is follow (before Chrome 47 it defaulted to manual).*/
-    referrer: 'client', /*A USVString specifying no-referrer, client, or a URL. The default is client.*/
-    keepalive: false,/* not supported yet */
-  };
-  const request = new Request('/sse-post', requestOptions);
-  const fetchOptions = {
-
-  };
-  const fetchPromise = fetch(request);
-  const fetchBody = await fetchPromise;
-  const jsonPromise = fetchBody.json();
-  const jsonResult = await jsonPromise;
-}
-
-function bindPlayerData() {
-  document.body.addEventListener('mousemove', async ({x, y, type})=> await postJSON({player: JSON.parse(decodeURI(window.location.hash.slice(1))).player, x, y, type}));
+  return true;
 }
 
 function mouse_player(group, property) {
@@ -243,6 +225,7 @@ function mouse_player(group, property) {
         
       }
     });
+
     const player = JSON.parse(decodeURI(window.location.hash.slice(1))).player;
     set_position(players[player], property, boardDimensions[`center-${property}`]);
   } catch(err) {
@@ -251,15 +234,11 @@ function mouse_player(group, property) {
 }
 
 const playerFunctions = {
-  player1_auto: renderLoop.bind(null, auto_player.bind(null, player1, selectSmallX, 'y')),
   player2_auto:  renderLoop.bind(null, auto_player.bind(null, player2, selectLargeX, 'y')),
-  player1_mouse:  mouse_player.bind(null, player1, 'y'),
   player2_mouse:  mouse_player.bind(null, player2, 'y'),
 }
 
 if(localOnly) {
-  playerFunctions.player1_auto();
-  playerFunctions.player2_auto();
-  playerFunctions.player1_mouse();
   document.querySelector('.start').addEventListener('click', start);
+  // console.log(document.querySelector('.start'));
 }

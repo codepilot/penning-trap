@@ -1,168 +1,215 @@
-<style>
-body {
-  margin: 0;
-}
-.controls {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-</style>
-<svg class="pong" width="1920" height="1080">
-  <g class="fixed" stroke="#F004" fill="transparent" stroke-width="5">
-    <circle cx="25" cy="25" r="20" />
-    <circle cx="75" cy="25" r="20" />
-    <circle cx="125" cy="25" r="20" />
-    <circle cx="175" cy="25" r="20" />
-    <circle cx="225" cy="25" r="20" />
-    <circle cx="275" cy="25" r="20" />
-    <circle cx="325" cy="25" r="20" />
-    <circle cx="375" cy="25" r="20" />
-    <circle cx="425" cy="25" r="20" />
-    <circle cx="475" cy="25" r="20" />
-    <circle cx="525" cy="25" r="20" />
-    <circle cx="575" cy="25" r="20" />
-    <circle cx="625" cy="25" r="20" />
-    <circle cx="675" cy="25" r="20" />
-    <circle cx="725" cy="25" r="20" />
-    <circle cx="775" cy="25" r="20" />
-    <circle cx="825" cy="25" r="20" />
-    <circle cx="875" cy="25" r="20" />
-    <circle cx="925" cy="25" r="20" />
-    <circle cx="975" cy="25" r="20" />
-    <circle cx="1025" cy="25" r="20" />
-    <circle cx="1075" cy="25" r="20" />
-    <circle cx="1125" cy="25" r="20" />
-    <circle cx="1175" cy="25" r="20" />
-    <circle cx="1225" cy="25" r="20" />
-    <circle cx="1275" cy="25" r="20" />
-    <circle cx="1325" cy="25" r="20" />
-    <circle cx="1375" cy="25" r="20" />
-    <circle cx="1425" cy="25" r="20" />
-    <circle cx="1475" cy="25" r="20" />
-    <circle cx="1525" cy="25" r="20" />
-    <circle cx="1575" cy="25" r="20" />
-    <circle cx="1625" cy="25" r="20" />
-    <circle cx="1675" cy="25" r="20" />
-    <circle cx="1725" cy="25" r="20" />
-    <circle cx="1775" cy="25" r="20" />
-    <circle cx="1825" cy="25" r="20" />
-    <circle cx="1875" cy="25" r="20" />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="manifest" href="manifest.json" />
+    <title>Penning Trap</title>
+    <style>
+      /* @media screen and (orientation:portrait) {
+        .portrait-message {
+          display: unset;
+        }
+        .controls {
+          display: none;
+        }
+        svg {
+          display: none;
+        }
+      } */
 
-    <circle cx="25" cy="1075" r="20" />
-    <circle cx="75" cy="1075" r="20" />
-    <circle cx="125" cy="1075" r="20" />
-    <circle cx="175" cy="1075" r="20" />
-    <circle cx="225" cy="1075" r="20" />
-    <circle cx="275" cy="1075" r="20" />
-    <circle cx="325" cy="1075" r="20" />
-    <circle cx="375" cy="1075" r="20" />
-    <circle cx="425" cy="1075" r="20" />
-    <circle cx="475" cy="1075" r="20" />
-    <circle cx="525" cy="1075" r="20" />
-    <circle cx="575" cy="1075" r="20" />
-    <circle cx="625" cy="1075" r="20" />
-    <circle cx="675" cy="1075" r="20" />
-    <circle cx="725" cy="1075" r="20" />
-    <circle cx="775" cy="1075" r="20" />
-    <circle cx="825" cy="1075" r="20" />
-    <circle cx="875" cy="1075" r="20" />
-    <circle cx="925" cy="1075" r="20" />
-    <circle cx="975" cy="1075" r="20" />
-    <circle cx="1025" cy="1075" r="20" />
-    <circle cx="1075" cy="1075" r="20" />
-    <circle cx="1125" cy="1075" r="20" />
-    <circle cx="1175" cy="1075" r="20" />
-    <circle cx="1225" cy="1075" r="20" />
-    <circle cx="1275" cy="1075" r="20" />
-    <circle cx="1325" cy="1075" r="20" />
-    <circle cx="1375" cy="1075" r="20" />
-    <circle cx="1425" cy="1075" r="20" />
-    <circle cx="1475" cy="1075" r="20" />
-    <circle cx="1525" cy="1075" r="20" />
-    <circle cx="1575" cy="1075" r="20" />
-    <circle cx="1625" cy="1075" r="20" />
-    <circle cx="1675" cy="1075" r="20" />
-    <circle cx="1725" cy="1075" r="20" />
-    <circle cx="1775" cy="1075" r="20" />
-    <circle cx="1825" cy="1075" r="20" />
-    <circle cx="1875" cy="1075" r="20" />
-
-
-    <!--
-    <circle cx="25" cy="75"  r="20" />
-    <circle cx="25" cy="125" r="20" />
-    <circle cx="25" cy="175" r="20" />
-    <circle cx="25" cy="225" r="20" />
-    <circle cx="25" cy="275" r="20" />
-    <circle cx="25" cy="325" r="20" />
-    <circle cx="25" cy="375" r="20" />
-    <circle cx="25" cy="425" r="20" />
-    <circle cx="25" cy="475" r="20" />
-    <circle cx="25" cy="525" r="20" />
-    <circle cx="25" cy="575" r="20" />
-    <circle cx="25" cy="625" r="20" />
-    <circle cx="25" cy="675" r="20" />
-    <circle cx="25" cy="725" r="20" />
-    <circle cx="25" cy="775" r="20" />
-    <circle cx="25" cy="825" r="20" />
-    <circle cx="25" cy="875" r="20" />
-    <circle cx="25" cy="925" r="20" />
-    <circle cx="25" cy="975" r="20" />
-    <circle cx="25" cy="1025" r="20" />
-    -->
-
-    <g class="player1">
-    <circle cx="25" cy="-100" r="20" />
-    <circle cx="25" cy="-50" r="20" />
-    <circle cx="25" cy="0" r="20" />
-    <circle cx="25" cy="50" r="20" />
-    <circle cx="25" cy="100" r="20" />
-    </g>
-
-    <g class="player2">
-    <circle cx="1875" cy="-100" r="20" />
-    <circle cx="1875" cy="-50" r="20" />
-    <circle cx="1875" cy="0" r="20" />
-    <circle cx="1875" cy="50" r="20" />
-    <circle cx="1875" cy="100" r="20" />
-    </g>
-
-    <!--
-    <circle cx="1875" cy="75" r="20" />
-    <circle cx="1875" cy="125" r="20" />
-    <circle cx="1875" cy="175" r="20" />
-    <circle cx="1875" cy="225" r="20" />
-    <circle cx="1875" cy="275" r="20" />
-    <circle cx="1875" cy="325" r="20" />
-    <circle cx="1875" cy="375" r="20" />
-    <circle cx="1875" cy="425" r="20" />
-    <circle cx="1875" cy="475" r="20" />
-    <circle cx="1875" cy="525" r="20" />
-    <circle cx="1875" cy="575" r="20" />
-    <circle cx="1875" cy="625" r="20" />
-    <circle cx="1875" cy="675" r="20" />
-    <circle cx="1875" cy="725" r="20" />
-    <circle cx="1875" cy="775" r="20" />
-    <circle cx="1875" cy="825" r="20" />
-    <circle cx="1875" cy="875" r="20" />
-    <circle cx="1875" cy="925" r="20" />
-    <circle cx="1875" cy="975" r="20" />
-    <circle cx="1875" cy="1025" r="20" />
-    -->
-
-  </g>
-  <g class="mobile">
-    <circle cx="920" cy="500" r="20" data-dx="0" data-dy="0" />
-    <circle cx="920" cy="580" r="20" data-dx="0" data-dy="0" />
-    <circle cx="1000" cy="500" r="20" data-dx="0" data-dy="0" />
-    <circle cx="1000" cy="580" r="20" data-dx="0" data-dy="0" />
-  </g>
-</svg>
-<div class="controls">
-<button class="start">Start</button>
-<button class="select-player" data-player="0">Not playing</button>
-<button class="select-player" data-player="1">Player 1</button>
-<button class="select-player" data-player="2">Player 2</button>
-</div>
-<script src="index.js"></script>
+      /* @media screen and (orientation:landscape) { */
+        .portrait-message {
+          display: none;
+        }
+        body {
+          margin: 0;
+        }
+        .controls {
+          position: fixed;
+          left: 0px;
+          top: 0px;
+          width: 100vw;
+          height: 100vh;
+        }
+        svg {
+          width: 100vw;
+          height: 100vh;
+        }
+        svg.hidden {
+          display: none;
+        }
+        .controls.hidden {
+          display: none;
+        }
+        .start {
+          margin: auto;
+          margin-left: auto;
+          display: block;
+          top: 50vh;
+          position: relative;
+        }
+      /* } */
+      </style>
+  </head>
+  <body>
+    <div class="portrait-message">
+      Please rotate screen to landscape
+    </div>
+    <svg class="pong hidden" viewbox="0 0 1920 1080">
+      <g class="fixed" stroke="#F004" fill="transparent" stroke-width="5">
+        <circle cx="25" cy="25" r="20" />
+        <circle cx="75" cy="25" r="20" />
+        <circle cx="125" cy="25" r="20" />
+        <circle cx="175" cy="25" r="20" />
+        <circle cx="225" cy="25" r="20" />
+        <circle cx="275" cy="25" r="20" />
+        <circle cx="325" cy="25" r="20" />
+        <circle cx="375" cy="25" r="20" />
+        <circle cx="425" cy="25" r="20" />
+        <circle cx="475" cy="25" r="20" />
+        <circle cx="525" cy="25" r="20" />
+        <circle cx="575" cy="25" r="20" />
+        <circle cx="625" cy="25" r="20" />
+        <circle cx="675" cy="25" r="20" />
+        <circle cx="725" cy="25" r="20" />
+        <circle cx="775" cy="25" r="20" />
+        <circle cx="825" cy="25" r="20" />
+        <circle cx="875" cy="25" r="20" />
+        <circle cx="925" cy="25" r="20" />
+        <circle cx="975" cy="25" r="20" />
+        <circle cx="1025" cy="25" r="20" />
+        <circle cx="1075" cy="25" r="20" />
+        <circle cx="1125" cy="25" r="20" />
+        <circle cx="1175" cy="25" r="20" />
+        <circle cx="1225" cy="25" r="20" />
+        <circle cx="1275" cy="25" r="20" />
+        <circle cx="1325" cy="25" r="20" />
+        <circle cx="1375" cy="25" r="20" />
+        <circle cx="1425" cy="25" r="20" />
+        <circle cx="1475" cy="25" r="20" />
+        <circle cx="1525" cy="25" r="20" />
+        <circle cx="1575" cy="25" r="20" />
+        <circle cx="1625" cy="25" r="20" />
+        <circle cx="1675" cy="25" r="20" />
+        <circle cx="1725" cy="25" r="20" />
+        <circle cx="1775" cy="25" r="20" />
+        <circle cx="1825" cy="25" r="20" />
+        <circle cx="1875" cy="25" r="20" />
+    
+        <circle cx="25" cy="1075" r="20" />
+        <circle cx="75" cy="1075" r="20" />
+        <circle cx="125" cy="1075" r="20" />
+        <circle cx="175" cy="1075" r="20" />
+        <circle cx="225" cy="1075" r="20" />
+        <circle cx="275" cy="1075" r="20" />
+        <circle cx="325" cy="1075" r="20" />
+        <circle cx="375" cy="1075" r="20" />
+        <circle cx="425" cy="1075" r="20" />
+        <circle cx="475" cy="1075" r="20" />
+        <circle cx="525" cy="1075" r="20" />
+        <circle cx="575" cy="1075" r="20" />
+        <circle cx="625" cy="1075" r="20" />
+        <circle cx="675" cy="1075" r="20" />
+        <circle cx="725" cy="1075" r="20" />
+        <circle cx="775" cy="1075" r="20" />
+        <circle cx="825" cy="1075" r="20" />
+        <circle cx="875" cy="1075" r="20" />
+        <circle cx="925" cy="1075" r="20" />
+        <circle cx="975" cy="1075" r="20" />
+        <circle cx="1025" cy="1075" r="20" />
+        <circle cx="1075" cy="1075" r="20" />
+        <circle cx="1125" cy="1075" r="20" />
+        <circle cx="1175" cy="1075" r="20" />
+        <circle cx="1225" cy="1075" r="20" />
+        <circle cx="1275" cy="1075" r="20" />
+        <circle cx="1325" cy="1075" r="20" />
+        <circle cx="1375" cy="1075" r="20" />
+        <circle cx="1425" cy="1075" r="20" />
+        <circle cx="1475" cy="1075" r="20" />
+        <circle cx="1525" cy="1075" r="20" />
+        <circle cx="1575" cy="1075" r="20" />
+        <circle cx="1625" cy="1075" r="20" />
+        <circle cx="1675" cy="1075" r="20" />
+        <circle cx="1725" cy="1075" r="20" />
+        <circle cx="1775" cy="1075" r="20" />
+        <circle cx="1825" cy="1075" r="20" />
+        <circle cx="1875" cy="1075" r="20" />
+    
+    
+        <!--
+        <circle cx="25" cy="75"  r="20" />
+        <circle cx="25" cy="125" r="20" />
+        <circle cx="25" cy="175" r="20" />
+        <circle cx="25" cy="225" r="20" />
+        <circle cx="25" cy="275" r="20" />
+        <circle cx="25" cy="325" r="20" />
+        <circle cx="25" cy="375" r="20" />
+        <circle cx="25" cy="425" r="20" />
+        <circle cx="25" cy="475" r="20" />
+        <circle cx="25" cy="525" r="20" />
+        <circle cx="25" cy="575" r="20" />
+        <circle cx="25" cy="625" r="20" />
+        <circle cx="25" cy="675" r="20" />
+        <circle cx="25" cy="725" r="20" />
+        <circle cx="25" cy="775" r="20" />
+        <circle cx="25" cy="825" r="20" />
+        <circle cx="25" cy="875" r="20" />
+        <circle cx="25" cy="925" r="20" />
+        <circle cx="25" cy="975" r="20" />
+        <circle cx="25" cy="1025" r="20" />
+        -->
+    
+        <g class="player1">
+        <circle cx="25" cy="-100" r="20" />
+        <circle cx="25" cy="-50" r="20" />
+        <circle cx="25" cy="0" r="20" />
+        <circle cx="25" cy="50" r="20" />
+        <circle cx="25" cy="100" r="20" />
+        </g>
+    
+        <g class="player2">
+        <circle cx="1875" cy="-100" r="20" />
+        <circle cx="1875" cy="-50" r="20" />
+        <circle cx="1875" cy="0" r="20" />
+        <circle cx="1875" cy="50" r="20" />
+        <circle cx="1875" cy="100" r="20" />
+        </g>
+    
+        <!--
+        <circle cx="1875" cy="75" r="20" />
+        <circle cx="1875" cy="125" r="20" />
+        <circle cx="1875" cy="175" r="20" />
+        <circle cx="1875" cy="225" r="20" />
+        <circle cx="1875" cy="275" r="20" />
+        <circle cx="1875" cy="325" r="20" />
+        <circle cx="1875" cy="375" r="20" />
+        <circle cx="1875" cy="425" r="20" />
+        <circle cx="1875" cy="475" r="20" />
+        <circle cx="1875" cy="525" r="20" />
+        <circle cx="1875" cy="575" r="20" />
+        <circle cx="1875" cy="625" r="20" />
+        <circle cx="1875" cy="675" r="20" />
+        <circle cx="1875" cy="725" r="20" />
+        <circle cx="1875" cy="775" r="20" />
+        <circle cx="1875" cy="825" r="20" />
+        <circle cx="1875" cy="875" r="20" />
+        <circle cx="1875" cy="925" r="20" />
+        <circle cx="1875" cy="975" r="20" />
+        <circle cx="1875" cy="1025" r="20" />
+        -->
+    
+      </g>
+      <g class="mobile">
+        <circle cx="920" cy="500" r="20" data-dx="0" data-dy="0" />
+        <circle cx="920" cy="580" r="20" data-dx="0" data-dy="0" />
+        <circle cx="1000" cy="500" r="20" data-dx="0" data-dy="0" />
+        <circle cx="1000" cy="580" r="20" data-dx="0" data-dy="0" />
+      </g>
+    </svg>
+    <div class="controls">
+    <button class="start">Start</button>
+    </div>
+    <script src="index.js"></script>
+  </body>
+</html>
